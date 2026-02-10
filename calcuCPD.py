@@ -281,7 +281,7 @@ def index():
                 raise ValueError("No hay cheques válidos para calcular")
 
             if ppv_denominador > 0:
-                totales["ppv"] = ppv_numerador / ppv_denominador
+                totales["ppv"] = round(ppv_numerador / ppv_denominador, 0)
 
             resultado = {
                 "detalle": detalle,
