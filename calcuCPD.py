@@ -209,6 +209,7 @@ def index():
             totales = {
                 "cantidad_cheques": 0,
                 "valor_nominal": 0,
+                "ppv": 0,
                 "descuento": 0,
                 "valor_descontado": 0,
                 "derechos_mercado": 0,
@@ -218,6 +219,8 @@ def index():
                 "iibb": 0,
                 "neto_a_recibir": 0,
             }
+            ppv_numerador = 0
+            ppv_denominador = 0
 
             if not row_ids:
                 row_ids = [str(i) for i in range(1, len(valores) + 1)]
@@ -258,12 +261,17 @@ def index():
                     errores.append(f"Fila {idx}: {e}")
                     continue
 
+                ppv_dias = (res["fecha_cobro"] - fecha_operacion).days
+                res["ppv_dias"] = ppv_dias
+
                 res["row_id"] = row_id
                 detalle.append(res)
 
                 for k in totales:
                     totales[k] += res.get(k, 0)
                 totales["cantidad_cheques"] += 1
+                ppv_numerador += valor_nominal * ppv_dias
+                ppv_denominador += valor_nominal
 
             if errores and not detalle:
                 raise ValueError(" | ".join(errores))
@@ -271,6 +279,9 @@ def index():
                 error = " | ".join(errores)
             if not detalle:
                 raise ValueError("No hay cheques válidos para calcular")
+
+            if ppv_denominador > 0:
+                totales["ppv"] = ppv_numerador / ppv_denominador
 
             resultado = {
                 "detalle": detalle,
