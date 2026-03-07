@@ -1,5 +1,5 @@
 ﻿from datetime import date, timedelta
-from feriados import FERIADOS_BANCARIOS
+from cgb_utils import es_feriado
 
 # =========================================================
 # FECHAS HÁBILES
@@ -8,7 +8,7 @@ from feriados import FERIADOS_BANCARIOS
 def es_habil(fecha: date) -> bool:
     if fecha.weekday() >= 5:  # sábado o domingo
         return False
-    if fecha in FERIADOS_BANCARIOS:
+    if es_feriado(fecha):
         return False
     return True
 
@@ -159,3 +159,4 @@ def calcular_neto_cheque(
         "iibb": round(iibb, 2),
         "neto_a_recibir": round(neto, 2),
     }
+

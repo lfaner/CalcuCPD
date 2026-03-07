@@ -1,4 +1,4 @@
 Flask
 openpyxl
 gunicorn
-git+https://github.com/lfaner/cgb-utils.git@v0.1.0
+cgb-utils @ git+https://github.com/lfaner/cgb-utils.git@v0.1.0
