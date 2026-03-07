@@ -1,46 +1,10 @@
-﻿from datetime import date, timedelta
-from cgb_utils import es_feriado
+﻿from datetime import date
 
-# =========================================================
-# FECHAS HÁBILES
-# =========================================================
-
-def es_habil(fecha: date) -> bool:
-    if fecha.weekday() >= 5:  # sábado o domingo
-        return False
-    if es_feriado(fecha):
-        return False
-    return True
-
-
-def sumar_dias_habiles(fecha: date, dias: int) -> date:
-    resultado = fecha
-    while dias > 0:
-        resultado += timedelta(days=1)
-        if es_habil(resultado):
-            dias -= 1
-    return resultado
-
-
-def siguiente_habil(fecha: date) -> date:
-    resultado = fecha
-    while not es_habil(resultado):
-        resultado += timedelta(days=1)
-    return resultado
-
-
-# =========================================================
-# DERECHOS DE MERCADO (según Excel)
-# =========================================================
-
-def calcular_derechos_mercado(valor_descontado: float, plazo_dias: int) -> float:
-    DERECHOS_PCT = 0.06 / 100
-    PLAZO_REFERENCIA = 90
-
-    if plazo_dias < PLAZO_REFERENCIA:
-        return valor_descontado * DERECHOS_PCT * plazo_dias / PLAZO_REFERENCIA
-    else:
-        return valor_descontado * DERECHOS_PCT
+from cgb_utils import (
+    calcular_derechos_mercado,
+    siguiente_habil,
+    sumar_dias_habiles,
+)
 
 
 # =========================================================
@@ -159,4 +123,3 @@ def calcular_neto_cheque(
         "iibb": round(iibb, 2),
         "neto_a_recibir": round(neto, 2),
     }
-
