@@ -47,7 +47,14 @@ log "Activando virtualenv"
 source .venv/bin/activate
 
 log "Instalando dependencias"
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+
+log "Validando dependencias criticas"
+if ! python -c "import cgb_utils" >/dev/null 2>&1; then
+  echo "Error: no se pudo importar 'cgb_utils' en el virtualenv activo"
+  echo "Revisa requirements.txt y la conectividad del servidor a GitHub"
+  exit 1
+fi
 
 log "Reiniciando servicio $SERVICE_NAME"
 sudo systemctl restart "$SERVICE_NAME"
